@@ -1,0 +1,6 @@
+@AgentFrameworkPocs.Agent_HostAddress = http://localhost:5117
+
+GET {{AgentFrameworkPocs.Agent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

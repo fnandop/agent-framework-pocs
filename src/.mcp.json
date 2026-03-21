@@ -1,0 +1,15 @@
+{
+  "inputs": [],
+  "servers": {
+    "DocumentIntelligenceMCP": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "C:\\Users\\fnand\\source\\repos\\agent-framework-pocs\\AgentFrameworkPocs\\AgentFrameworkPocs.DocumentIntelligenceMcpServer\\AgentFrameworkPocs.DocumentIntelligenceMcpServer.csproj"
+      ],
+      "env": {}
+    }
+  }
+}

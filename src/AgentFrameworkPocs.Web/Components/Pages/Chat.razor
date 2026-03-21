@@ -1,0 +1,239 @@
+@page "/chat"
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+@inject IJSRuntime JS
+
+<PageTitle>Agent Chat</PageTitle>
+
+<div class="chat-container d-flex flex-column" style="height: calc(100vh - 4.5rem);">
+    <h4 class="mb-3 px-2 pt-2">
+        <span class="bi bi-chat-dots-fill me-2" aria-hidden="true"></span>Agent Chat
+    </h4>
+
+    <div class="chat-messages flex-grow-1 overflow-auto px-3 pb-2" id="chatMessages">
+        @if (_messages.Count == 0)
+        {
+            <div class="text-muted text-center mt-5">
+                <p>Send a message to start a conversation with the email agent.</p>
+            </div>
+        }
+        @foreach (var msg in _messages)
+        {
+            <div class="d-flex mb-3 @(msg.Role == "user" ? "justify-content-end" : "justify-content-start")">
+                <div class="chat-bubble @(msg.Role == "user" ? "chat-bubble-user" : "chat-bubble-assistant")">
+                    <div class="chat-role fw-semibold small mb-1">
+                        @(msg.Role == "user" ? "You" : "Agent")
+                    </div>
+                    <div class="chat-content" style="white-space: pre-wrap;">@msg.Content</div>
+                </div>
+            </div>
+        }
+        @if (_isStreaming)
+        {
+            <div class="d-flex mb-3 justify-content-start">
+                <div class="chat-bubble chat-bubble-assistant">
+                    <div class="chat-role fw-semibold small mb-1">Agent</div>
+                    <div class="chat-content" style="white-space: pre-wrap;">@_streamingContent<span class="typing-indicator">▍</span></div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="chat-input border-top p-3">
+        <div class="input-group">
+            <textarea class="form-control" rows="8" placeholder="Type your message…"
+                      @bind="_userInput" @bind:event="oninput"
+                      @onkeydown="HandleKeyDown"
+                      disabled="@_isStreaming"></textarea>
+            <button class="btn btn-primary" @onclick="SendMessage" disabled="@(_isStreaming || string.IsNullOrWhiteSpace(_userInput))">
+                Send
+            </button>
+        </div>
+        <div class="small text-muted mt-1">Press Shift+Enter for new line, Enter to send</div>
+    </div>
+</div>
+
+<style>
+    .chat-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .chat-bubble {
+        max-width: 75%;
+        padding: 0.75rem 1rem;
+        border-radius: 1rem;
+        word-break: break-word;
+    }
+
+    .chat-bubble-user {
+        background-color: #1b6ec2;
+        color: #fff;
+        border-bottom-right-radius: 0.25rem;
+    }
+
+    .chat-bubble-assistant {
+        background-color: #f0f0f0;
+        color: #212529;
+        border-bottom-left-radius: 0.25rem;
+    }
+
+    .chat-role {
+        font-size: 0.75rem;
+        opacity: 0.75;
+    }
+
+    .typing-indicator {
+        animation: blink 1s step-end infinite;
+    }
+
+    @@keyframes blink {
+        50% { opacity: 0; }
+    }
+
+    .chat-input textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+</style>
+
+@code {
+    private readonly List<ChatMessageItem> _messages = [];
+    private string _userInput = "";
+    private bool _isStreaming;
+    private string _streamingContent = "";
+    private string _threadId = Guid.NewGuid().ToString();
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !e.ShiftKey)
+        {
+            await SendMessage();
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        var text = _userInput?.Trim();
+        if (string.IsNullOrWhiteSpace(text) || _isStreaming)
+            return;
+
+        _messages.Add(new ChatMessageItem("user", text));
+        _userInput = "";
+        _isStreaming = true;
+        _streamingContent = "";
+        StateHasChanged();
+        await ScrollToBottom();
+
+        try
+        {
+            await StreamAgentResponse();
+        }
+        catch (Exception ex)
+        {
+            _streamingContent = "";
+            _messages.Add(new ChatMessageItem("assistant", $"Error: {ex.Message}"));
+        }
+        finally
+        {
+            if (!string.IsNullOrEmpty(_streamingContent))
+            {
+                _messages.Add(new ChatMessageItem("assistant", _streamingContent));
+            }
+            _isStreaming = false;
+            _streamingContent = "";
+            StateHasChanged();
+            await ScrollToBottom();
+        }
+    }
+
+    private async Task StreamAgentResponse()
+    {
+        var httpClient = HttpClientFactory.CreateClient("agent");
+
+        var aguiMessages = _messages.Select(m => new
+        {
+            id = Guid.NewGuid().ToString(),
+            role = m.Role,
+            content = m.Content
+        }).ToArray();
+
+        var requestBody = new
+        {
+            threadId = _threadId,
+            runId = Guid.NewGuid().ToString(),
+            messages = aguiMessages
+        };
+
+        var request = new HttpRequestMessage(HttpMethod.Post, "ag-ui")
+        {
+            Content = JsonContent.Create(requestBody)
+        };
+        request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
+
+        using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
+
+        using var stream = await response.Content.ReadAsStreamAsync();
+        using var reader = new StreamReader(stream);
+
+        var lastUpdate = DateTime.UtcNow;
+
+        while (!reader.EndOfStream)
+        {
+            var line = await reader.ReadLineAsync();
+            if (line is null)
+                break;
+
+            if (!line.StartsWith("data:"))
+                continue;
+
+            var json = line["data:".Length..].Trim();
+            if (string.IsNullOrEmpty(json))
+                continue;
+
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                if (root.TryGetProperty("type", out var typeProp))
+                {
+                    var eventType = typeProp.GetString();
+
+                    if (eventType == "TEXT_MESSAGE_CONTENT" &&
+                        root.TryGetProperty("delta", out var deltaProp))
+                    {
+                        _streamingContent += deltaProp.GetString();
+
+                        if ((DateTime.UtcNow - lastUpdate).TotalMilliseconds > 50)
+                        {
+                            lastUpdate = DateTime.UtcNow;
+                            StateHasChanged();
+                            await ScrollToBottom();
+                            await Task.Delay(1);
+                        }
+                    }
+                }
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                // Skip malformed SSE data lines
+            }
+        }
+    }
+
+    private async Task ScrollToBottom()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("eval", "document.getElementById('chatMessages')?.scrollTo(0, document.getElementById('chatMessages').scrollHeight)");
+        }
+        catch
+        {
+            // JS interop may fail during prerender
+        }
+    }
+
+    private sealed record ChatMessageItem(string Role, string Content);
+}
