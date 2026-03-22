@@ -13,7 +13,7 @@ The scenario simulates an **accounts payable** department that receives vendor e
 ```
 ┌────────────────────────────────────────────────────────────────────┐
 │                        .NET Aspire AppHost                         │
-│                    (orchestrates all services)                      │
+│                    (orchestrates all services)                     │
 └──────┬──────────┬──────────┬──────────┬──────────┬─────────────────┘
        │          │          │          │          │
        ▼          ▼          ▼          ▼          ▼
@@ -283,8 +283,8 @@ John
 
 This PoC was built using the following repositories as reference and documentation:
 
-- **[agent-framework](https://github.com/fnandop/agent-framework)** — Fork of the [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) used as the core agent runtime, including AG-UI hosting, handoff workflows, and ChatClientAgent
-- **[interview-coach-agent-framework](https://github.com/fnandop/interview-coach-agent-framework)** — A prior project that served as a starting point for the multi-agent handoff pattern, MCP client integration with Aspire, and the AG-UI endpoint wiring
+- **[agent-framework](https://github.com/microsoft/agent-framework)** — The [Microsoft Agent Framework](https://github.com/microsoft/agent-framework) used as the core agent runtime, including AG-UI hosting, handoff workflows, and ChatClientAgent
+- **[interview-coach-agent-framework](https://github.com/Azure-Samples/interview-coach-agent-framework)** — An Azure Samples project that served as a starting point for the multi-agent handoff pattern, MCP client integration with Aspire, and the AG-UI endpoint wiring
 
 ---
 
