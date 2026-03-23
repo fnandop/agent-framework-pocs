@@ -146,7 +146,7 @@ Wraps [Azure AI Document Intelligence](https://learn.microsoft.com/azure/ai-serv
 
 ### Dummy ERP MCP Server
 
-Simulates an ERP system (modeled after [Business Central APIs v2.0](https://learn.microsoft.com/dynamics365/business-central/dev-itpro/api-reference/v2.0/)) with in-memory mock data:
+Simulates an ERP system with in-memory mock data:
 
 **Purchase Order tools:**
 
