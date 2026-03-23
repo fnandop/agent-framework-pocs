@@ -1,4 +1,4 @@
-# Agent Framework PoCs + Azure Document Intelegence — Accounts Payable Email Processing
+# Agent Framework PoCs + Azure Document Intelligence — Accounts Payable Email Processing
 
 A proof-of-concept that demonstrates how to build a **multi-agent email-handling system** using the [Azure Agent Framework](https://github.com/microsoft/agent-framework), [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers, [Azure Document Intelligence](https://learn.microsoft.com/azure/ai-services/document-intelligence/), and [.NET Aspire](https://learn.microsoft.com/dotnet/aspire/) for orchestration.
 
@@ -196,7 +196,21 @@ Simulates an ERP system (modeled after [Business Central APIs v2.0](https://lear
 
 ## Configuration
 
-API keys and endpoints are stored in [User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets) for the AppHost project.
+API keys are stored in [User Secrets](https://learn.microsoft.com/aspnet/core/security/app-secrets) for the AppHost project and endpoints in appsettings or env variables.
+
+```json
+"Azure": {
+  "OpenAI": {
+    "EndPoint": "https://<your-resource>.openai.azure.com/openai/v1",
+    "DeploymentName": "gpt-4o-mini",
+    "ApiKey": ""      // in user secrets as "Azure:OpenAI:ApiKey"
+  },
+  "DocumentIntelligence": {
+    "Endpoint": "https://<your-resource>.cognitiveservices.azure.com/",
+    "ApiKey": ""      // in user secrets as "Azure:DocumentIntelligence:ApiKey"
+  }
+}
+```
 
 Set the secrets for the AppHost project (`AgentFrameworkPocs.AppHost`):
 
@@ -204,11 +218,8 @@ Set the secrets for the AppHost project (`AgentFrameworkPocs.AppHost`):
 cd AgentFrameworkPocs.AppHost
 
 dotnet user-secrets set "Azure:OpenAI:ApiKey" "<your-openai-api-key>"
-dotnet user-secrets set "Azure:OpenAI:EndPoint" "https://<your-resource>.openai.azure.com/openai/v1"
-dotnet user-secrets set "Azure:OpenAI:DeploymentName" "gpt-4o-mini"
-
 dotnet user-secrets set "Azure:DocumentIntelligence:ApiKey" "<your-doc-intelligence-api-key>"
-dotnet user-secrets set "Azure:DocumentIntelligence:EndPoint" "https://<your-resource>.cognitiveservices.azure.com/"
+
 ```
 
 ---
