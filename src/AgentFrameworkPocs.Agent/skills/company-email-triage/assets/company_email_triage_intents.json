@@ -1,0 +1,633 @@
+{
+  "version": "1.0",
+  "catalog_name": "company_email_triage_intents",
+  "intents": [
+    {
+      "intent": "sales_inquiry",
+      "category": "sales",
+      "definition": "A prospect is asking about products, services, capabilities, or commercial fit.",
+      "route_to": "sales",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "I would like to know more about your solution",
+        "Can you share more details about your services?",
+        "We are evaluating vendors"
+      ]
+    },
+    {
+      "intent": "demo_request",
+      "category": "sales",
+      "definition": "A prospect wants a live demo, walkthrough, or presentation.",
+      "route_to": "sales",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Can we schedule a demo?",
+        "I'd like to see the platform in action",
+        "Please arrange a product walkthrough"
+      ]
+    },
+    {
+      "intent": "pricing_request",
+      "category": "sales",
+      "definition": "A prospect or customer asks about pricing, plans, or costs.",
+      "route_to": "sales",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Can you send your pricing?",
+        "What does the enterprise plan cost?",
+        "Please share your price list"
+      ]
+    },
+    {
+      "intent": "quote_request",
+      "category": "sales",
+      "definition": "A sender requests a formal quotation for products or services.",
+      "route_to": "sales",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Please provide a quote",
+        "Can you send a quotation for 100 licenses?",
+        "We need a commercial proposal"
+      ]
+    },
+    {
+      "intent": "partnership_request",
+      "category": "business_development",
+      "definition": "A company or individual proposes a strategic, reseller, referral, or integration partnership.",
+      "route_to": "business_development",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "We would like to explore a partnership",
+        "Interested in becoming a reseller",
+        "Let's discuss collaboration opportunities"
+      ]
+    },
+    {
+      "intent": "customer_support_request",
+      "category": "support",
+      "definition": "A customer needs help using the product or resolving a non-technical issue.",
+      "route_to": "support",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "I need help with my account",
+        "Can you assist with this issue?",
+        "I have a question about using the service"
+      ]
+    },
+    {
+      "intent": "technical_issue",
+      "category": "support",
+      "definition": "The sender reports a bug, outage, malfunction, or product behavior issue.",
+      "route_to": "technical_support",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "The system is not working",
+        "We found a bug",
+        "The application is down",
+        "This feature is broken"
+      ]
+    },
+    {
+      "intent": "account_access_issue",
+      "category": "support",
+      "definition": "The sender cannot log in, access the account, reset credentials, or use authentication.",
+      "route_to": "support",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "I cannot log in",
+        "Password reset is not working",
+        "My account is locked",
+        "I lost access to my account"
+      ]
+    },
+    {
+      "intent": "billing_issue",
+      "category": "customer_billing",
+      "definition": "A customer disputes a charge, invoice, payment status, or billing configuration.",
+      "route_to": "billing_ops",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "I was charged incorrectly",
+        "There is an issue with my invoice",
+        "Payment failed",
+        "Why was I billed twice?"
+      ]
+    },
+    {
+      "intent": "refund_request",
+      "category": "customer_billing",
+      "definition": "A customer asks for a refund, reimbursement, or credit reversal.",
+      "route_to": "billing_ops",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "I would like a refund",
+        "Please reverse this charge",
+        "Can you reimburse this payment?"
+      ]
+    },
+    {
+      "intent": "cancellation_request",
+      "category": "customer_billing",
+      "definition": "A customer asks to cancel a service, subscription, or order.",
+      "route_to": "customer_success",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Please cancel my subscription",
+        "I want to terminate the service",
+        "Close my account"
+      ]
+    },
+    {
+      "intent": "complaint",
+      "category": "customer_relations",
+      "definition": "A sender expresses dissatisfaction with service, support, billing, or experience.",
+      "route_to": "support",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "I am very unhappy with your service",
+        "This is unacceptable",
+        "I want to make a complaint"
+      ]
+    },
+    {
+      "intent": "escalation",
+      "category": "customer_relations",
+      "definition": "A sender explicitly escalates an unresolved issue or requests management attention.",
+      "route_to": "escalations",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "Please escalate this urgently",
+        "I want to speak to a manager",
+        "This has not been resolved after multiple attempts"
+      ]
+    },
+    {
+      "intent": "feature_request",
+      "category": "product_feedback",
+      "definition": "A customer or prospect requests a new feature, enhancement, or product capability.",
+      "route_to": "product_ops",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Do you support this feature?",
+        "Please add this capability",
+        "It would be useful to have this function"
+      ]
+    },
+    {
+      "intent": "general_question",
+      "category": "general",
+      "definition": "A message seeks general information and does not fit a more specific operational category.",
+      "route_to": "general_queue",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "I have a question",
+        "Can you clarify this for me?",
+        "I need some information"
+      ]
+    },
+    {
+      "intent": "follow_up",
+      "category": "general",
+      "definition": "A sender follows up on a prior unanswered or unresolved email.",
+      "route_to": "same_owner_or_queue",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Just following up on my previous email",
+        "Any update on this?",
+        "Checking in again"
+      ]
+    },
+    {
+      "intent": "vendor_invoice_submission",
+      "category": "accounts_payable",
+      "definition": "A supplier or vendor sends an invoice requesting payment for delivered goods or services.",
+      "route_to": "accounts_payable",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Please find attached invoice INV-7781",
+        "Attached is our invoice for March services",
+        "Kindly process the enclosed invoice for payment"
+      ]
+    },
+    {
+      "intent": "vendor_payment_followup",
+      "category": "accounts_payable",
+      "definition": "A supplier asks about payment status, overdue payment, or expected payment date.",
+      "route_to": "accounts_payable",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Can you confirm payment status?",
+        "This invoice is overdue",
+        "Please advise expected payment date"
+      ]
+    },
+    {
+      "intent": "vendor_statement_submission",
+      "category": "accounts_payable",
+      "definition": "A vendor sends an account statement or reconciliation summary.",
+      "route_to": "accounts_payable",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Please find attached our statement of account",
+        "Sharing the monthly vendor statement",
+        "Kindly review the outstanding balance summary"
+      ]
+    },
+    {
+      "intent": "vendor_credit_note_submission",
+      "category": "accounts_payable",
+      "definition": "A vendor submits a credit note reducing or correcting a previously billed amount.",
+      "route_to": "accounts_payable",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Attached is the credit note",
+        "Please apply this vendor credit",
+        "We issued a credit memo for the previous invoice"
+      ]
+    },
+    {
+      "intent": "purchase_order_query",
+      "category": "procurement",
+      "definition": "A vendor or internal user asks about PO issuance, status, mismatch, or details.",
+      "route_to": "procurement",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Can you share the PO number?",
+        "We have not received the purchase order",
+        "There is a mismatch between PO and invoice"
+      ]
+    },
+    {
+      "intent": "po_acknowledgement",
+      "category": "procurement",
+      "definition": "A vendor confirms receipt or acceptance of a purchase order.",
+      "route_to": "procurement",
+      "priority_default": "P4",
+      "example_trigger_phrases": [
+        "We confirm receipt of your PO",
+        "Purchase order acknowledged",
+        "We accept the PO terms"
+      ]
+    },
+    {
+      "intent": "supplier_onboarding",
+      "category": "procurement",
+      "definition": "A new or existing supplier provides onboarding forms, tax docs, banking details, or registration data.",
+      "route_to": "procurement",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Please find our vendor onboarding documents",
+        "Sharing supplier registration details",
+        "Attached are our tax and bank forms"
+      ]
+    },
+    {
+      "intent": "bank_details_update_request",
+      "category": "procurement_risk",
+      "definition": "A vendor requests a change to payment bank details or remittance instructions.",
+      "route_to": "accounts_payable_review",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "Please update our bank account details",
+        "Kindly use the new IBAN for future payments",
+        "Our remittance information has changed"
+      ]
+    },
+    {
+      "intent": "delivery_update",
+      "category": "operations",
+      "definition": "A vendor or logistics provider gives a shipping, fulfillment, or delivery status update.",
+      "route_to": "operations",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Your order has shipped",
+        "Delivery is scheduled for tomorrow",
+        "Sharing shipment tracking details"
+      ]
+    },
+    {
+      "intent": "shipment_delay_notice",
+      "category": "operations",
+      "definition": "A supplier or carrier reports a delivery delay or fulfillment problem.",
+      "route_to": "operations",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "The shipment will be delayed",
+        "There is a logistics issue affecting delivery",
+        "Expected delivery date has changed"
+      ]
+    },
+    {
+      "intent": "payment_confirmation",
+      "category": "finance",
+      "definition": "A sender confirms receipt or execution of a payment.",
+      "route_to": "finance_ops",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Payment has been received",
+        "Please find payment confirmation attached",
+        "We confirm remittance of funds"
+      ]
+    },
+    {
+      "intent": "tax_document_submission",
+      "category": "finance",
+      "definition": "A sender shares tax forms, VAT documents, withholding certificates, or similar compliance finance records.",
+      "route_to": "finance_ops",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Attached is our VAT certificate",
+        "Please find the tax form enclosed",
+        "Sharing withholding tax documentation"
+      ]
+    },
+    {
+      "intent": "renewal_discussion",
+      "category": "customer_success",
+      "definition": "A customer discusses renewing, renegotiating, or reviewing an expiring contract or subscription.",
+      "route_to": "customer_success",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Our renewal is coming up",
+        "Let's discuss renewal terms",
+        "Please send renewal pricing"
+      ]
+    },
+    {
+      "intent": "upgrade_request",
+      "category": "customer_success",
+      "definition": "A customer wants to move to a higher plan, add capacity, or expand services.",
+      "route_to": "customer_success",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "We want to upgrade our plan",
+        "Please add more seats",
+        "We need to move to enterprise"
+      ]
+    },
+    {
+      "intent": "downgrade_request",
+      "category": "customer_success",
+      "definition": "A customer wants to reduce service tier, seats, or commercial scope.",
+      "route_to": "customer_success",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "We want to downgrade our plan",
+        "Please reduce our subscription",
+        "We need fewer licenses"
+      ]
+    },
+    {
+      "intent": "training_request",
+      "category": "customer_success",
+      "definition": "A customer asks for onboarding, enablement, training, or education sessions.",
+      "route_to": "customer_success",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Can you provide training for our team?",
+        "We need onboarding support",
+        "Please schedule a training session"
+      ]
+    },
+    {
+      "intent": "legal_notice",
+      "category": "legal",
+      "definition": "A sender issues a formal legal communication, claim, notice, or threat of action.",
+      "route_to": "legal",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "This is a formal legal notice",
+        "Our counsel has reviewed this matter",
+        "Please respond to this legal claim"
+      ]
+    },
+    {
+      "intent": "contract_review",
+      "category": "legal",
+      "definition": "A sender requests review, markup, or negotiation of contractual terms.",
+      "route_to": "legal",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Please review the attached agreement",
+        "Sharing contract redlines",
+        "Can you confirm these contract terms?"
+      ]
+    },
+    {
+      "intent": "nda_request",
+      "category": "legal",
+      "definition": "A sender asks to execute or review a non-disclosure agreement.",
+      "route_to": "legal",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Please sign the NDA",
+        "Sharing mutual NDA for review",
+        "Can we put an NDA in place?"
+      ]
+    },
+    {
+      "intent": "privacy_request",
+      "category": "privacy",
+      "definition": "A sender raises a privacy-related concern or request involving personal data handling.",
+      "route_to": "privacy_team",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "I have a privacy concern",
+        "How are you processing my personal data?",
+        "This relates to data protection rights"
+      ]
+    },
+    {
+      "intent": "data_access_request",
+      "category": "privacy",
+      "definition": "A person requests access to personal data held by the company.",
+      "route_to": "privacy_team",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "Please provide a copy of my data",
+        "I am making a subject access request",
+        "What personal data do you hold about me?"
+      ]
+    },
+    {
+      "intent": "data_deletion_request",
+      "category": "privacy",
+      "definition": "A person requests deletion, erasure, or removal of personal data.",
+      "route_to": "privacy_team",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "Please delete my personal data",
+        "I want my account and data erased",
+        "Remove all information you hold about me"
+      ]
+    },
+    {
+      "intent": "security_incident_report",
+      "category": "security",
+      "definition": "A sender reports unauthorized access, breach, compromise, or a suspected security event.",
+      "route_to": "security",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "We suspect unauthorized access",
+        "There may have been a data breach",
+        "We detected suspicious activity"
+      ]
+    },
+    {
+      "intent": "phishing_or_fraud_report",
+      "category": "security",
+      "definition": "A sender reports a scam, impersonation attempt, fake payment request, or phishing email.",
+      "route_to": "security",
+      "priority_default": "P1",
+      "example_trigger_phrases": [
+        "This looks like phishing",
+        "We received a suspicious payment request",
+        "Someone is impersonating your company"
+      ]
+    },
+    {
+      "intent": "job_application",
+      "category": "recruiting",
+      "definition": "A candidate applies for a role and may attach a CV or resume.",
+      "route_to": "recruiting",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Please find my resume attached",
+        "I would like to apply for this role",
+        "Submitting my application"
+      ]
+    },
+    {
+      "intent": "candidate_followup",
+      "category": "recruiting",
+      "definition": "A candidate follows up on an application, interview, or hiring process.",
+      "route_to": "recruiting",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Following up on my application",
+        "Any update on the interview process?",
+        "Checking the status of my candidacy"
+      ]
+    },
+    {
+      "intent": "interview_scheduling",
+      "category": "recruiting",
+      "definition": "A recruiter or candidate coordinates interview timing or availability.",
+      "route_to": "recruiting",
+      "priority_default": "P2",
+      "example_trigger_phrases": [
+        "Please confirm your availability",
+        "Can we schedule the interview?",
+        "Here are my available time slots"
+      ]
+    },
+    {
+      "intent": "internal_approval_request",
+      "category": "internal_operations",
+      "definition": "An internal sender requests approval for spend, action, access, or workflow completion.",
+      "route_to": "internal_ops",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Please approve this request",
+        "Approval needed for this purchase",
+        "Can you sign off on this?"
+      ]
+    },
+    {
+      "intent": "meeting_request",
+      "category": "internal_operations",
+      "definition": "A sender requests a meeting, call, or calendar booking not primarily related to sales demo scheduling.",
+      "route_to": "general_queue",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Can we set up a meeting?",
+        "Please book time to discuss this",
+        "Would you be available for a call?"
+      ]
+    },
+    {
+      "intent": "document_submission",
+      "category": "internal_operations",
+      "definition": "A sender provides requested paperwork, forms, reports, or supporting documents.",
+      "route_to": "document_processing",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Attached are the requested documents",
+        "Please find the completed form enclosed",
+        "Sharing the signed copy"
+      ]
+    },
+    {
+      "intent": "auto_reply",
+      "category": "mail_system",
+      "definition": "An automatic system-generated response such as out-of-office or acknowledgment.",
+      "route_to": "no_action_or_thread_context",
+      "priority_default": "P4",
+      "example_trigger_phrases": [
+        "This is an automated response",
+        "I am currently out of office",
+        "Thank you for your email, this inbox is unattended"
+      ]
+    },
+    {
+      "intent": "bounce_notification",
+      "category": "mail_system",
+      "definition": "A system message indicates that an email could not be delivered.",
+      "route_to": "mail_admin",
+      "priority_default": "P3",
+      "example_trigger_phrases": [
+        "Delivery has failed",
+        "Message could not be delivered",
+        "Undeliverable mail returned to sender"
+      ]
+    },
+    {
+      "intent": "newsletter",
+      "category": "low_value",
+      "definition": "A mailing-list or subscription content message with no operational action needed.",
+      "route_to": "low_priority_or_archive",
+      "priority_default": "P4",
+      "example_trigger_phrases": [
+        "View this email in your browser",
+        "You are receiving this newsletter because",
+        "Latest updates from our team"
+      ]
+    },
+    {
+      "intent": "marketing_outreach",
+      "category": "low_value",
+      "definition": "An unsolicited promotional message, cold pitch, or generic sales outreach sent to the company inbox.",
+      "route_to": "marketing_or_archive",
+      "priority_default": "P4",
+      "example_trigger_phrases": [
+        "We can help you grow your business",
+        "I'd love 15 minutes of your time",
+        "Special offer for your company"
+      ]
+    },
+    {
+      "intent": "spam_or_irrelevant",
+      "category": "junk",
+      "definition": "A clearly irrelevant, suspicious, or non-business email with no legitimate action required.",
+      "route_to": "junk",
+      "priority_default": "P4",
+      "example_trigger_phrases": [
+        "Congratulations, you have won",
+        "Claim your reward now",
+        "Urgent confidential transfer request"
+      ]
+    },
+    {
+      "intent": "duplicate_message",
+      "category": "mail_processing",
+      "definition": "A repeat of an already received message or submission with no new meaningful content.",
+      "route_to": "merge_with_existing_thread",
+      "priority_default": "P4",
+      "example_trigger_phrases": [
+        "Resending this in case you missed it",
+        "Please see my previous email below",
+        "Forwarding the same request again"
+      ]
+    }
+  ]
+}
