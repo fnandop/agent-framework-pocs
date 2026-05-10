@@ -135,7 +135,7 @@ namespace AgentFrameworkPocs.Agent
             IList<McpClientTool> dummyErpMcpClientTools = dummyErpMcpClient.ListToolsAsync().GetAwaiter().GetResult();
 
 #pragma warning disable MAAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            var skillsProvider = new FileAgentSkillsProvider(skillPath: Path.Combine(AppContext.BaseDirectory, "skills"));
+            var skillsProvider = new AgentSkillsProvider(skillPath: Path.Combine(AppContext.BaseDirectory, "skills"));
 #pragma warning restore MAAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             var triageAgent = new ChatClientAgent(
                 chatClient: chatClient,
@@ -233,12 +233,14 @@ namespace AgentFrameworkPocs.Agent
                 [Final polite, professional email response to the caller. Do not expose internal tools, agent names, or workflow details.]
                 """);
 
+#pragma warning disable MAAIW001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             var workflow = AgentWorkflowBuilder
                            .CreateHandoffBuilderWith(triageAgent)
                            .WithHandoffs(triageAgent, [invoiceHandlerAgent, generalInquiryAgent, summariserAgent])
                            .WithHandoffs(invoiceHandlerAgent, [summariserAgent])
                            .WithHandoffs(generalInquiryAgent, [summariserAgent])
                            .Build();
+#pragma warning restore MAAIW001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return workflow.SetName(key);
         }
