@@ -12,6 +12,8 @@ var openai = builder.AddOpenAI("openai")
                     .WithApiKey(openaiKeyParameter);
 var chat = openai.AddModel("chat", deploymentName!);
 
+var qdrant = builder.AddQdrant("qdrant");
+
 var documentIntelligenceEndpoint = config["Azure:DocumentIntelligence:EndPoint"];
 var documentIntelligenceKey = config["Azure:DocumentIntelligence:ApiKey"];
 var documentIntelligenceApiKeyParameter = builder.AddParameter("document-intelligence-api-key", documentIntelligenceKey!, secret: true);
@@ -28,7 +30,9 @@ var agent = builder.AddProject<Projects.AgentFrameworkPocs_Agent>("agent")
                    .WithReference(dummyErp)
                    .WaitFor(dummyErp)
                    .WithReference(chat)
-                   .WaitFor(chat);
+                   .WaitFor(chat)
+                   .WithReference(qdrant)
+                   .WaitFor(qdrant);
 
 var mailpit = builder.AddMailPit("mailpit");
 
